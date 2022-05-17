@@ -1,0 +1,34 @@
+<div class="row" style="margin-top: 10px;">
+  <div class="col-md-6">
+    <h2 style="text-align: center;">Buy</h2>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 text-left"><b>Size</b></div>
+      <div class="col-md-6 text-right"><b>Bid</b></div>
+    </div>
+    <div class="row" *ngFor="let buy of dataBuy; let i = index">
+      <div class="col-md-6 text-left">{{buy.size}}</div>
+      <div class="col-md-6 text-right" style="color: red;">{{buy.price}}</div>
+    </div>
+    <div class="row"  style="font-size: 18px">
+      <div class="col-md-6 text-left"><b>Total</b></div>
+      <div class="col-md-6 text-right"><b>{{totalBuy}}</b></div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <h2 style="text-align: center;">Sell</h2>
+    <hr>
+    <div class="row">
+      <div class="col-md-6 text-left"><b>Ask</b></div>
+      <div class="col-md-6 text-right"><b>Size</b></div>
+    </div>
+    <div class="row" *ngFor="let sell of dataSell; let i = index">
+      <div class="col-md-6 text-left" style="color: rgb(14, 203, 129);">{{sell.price}}</div>
+      <div class="col-md-6 text-right">{{sell.size}}</div>
+    </div>
+    <div class="row"  style="font-size: 18px">
+      <div class="col-md-6 text-left"><b>Total</b></div>
+      <div class="col-md-6 text-right"><b>{{totalSell}}</b></div>
+    </div>
+  </div>
+</div>
