@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TradingListComponent } from './components/trading-list/trading-list.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:8888', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [

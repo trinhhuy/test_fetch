@@ -15,4 +15,8 @@ export class TradingService {
   getData() {
     return this.http.get(urlGetData);
   }
+
+  sendMessage(type: boolean) {
+    this.socket.emit('trading', type);
+  }
 }

@@ -20,7 +20,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   @SubscribeMessage('trading')
   public async handleMessage(client: Socket, isGetNewData: Boolean) {
     if (isGetNewData) {
-      let data = await this.service.getData()
+      let data = await this.service.getDataOrder()
       this.server.emit('trading-lists', data);
     }
   }
