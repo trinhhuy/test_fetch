@@ -27,6 +27,9 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   afterInit(server: Server) {
     this.logger.log('Init');
+    setInterval(function(){
+      this.server.emit('trading', true);
+    }, 3000);
   }
 
   handleDisconnect(client: Socket) {

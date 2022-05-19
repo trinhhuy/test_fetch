@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
-const axios = require('axios')
+import { Injectable, HttpService } from '@nestjs/common';
 
 @Injectable()
 export class TradingService {
-  async getData() {
+  constructor(private readonly http: HttpService) {}
+
+  async getData(): Promise<{ high: Number, low: Number }> {
     try {
-      let response = await axios.get('https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1m&&limit=1')
+      let response = await this.http.get('https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1m&&limit=1')
       if (response.data) {
         let item = response.data[0]
         return { high: Number(item[2]), low: Number(item[3]) }
@@ -17,7 +18,7 @@ export class TradingService {
     }
   }
 
-  async getDataOrder() {
+  async getDataOrder(): Promise<{ buy: Array<Object>, sell: Array<Object> }> {
     let data = await this.getData();
     let result = {
       buy: [],
@@ -39,7 +40,7 @@ export class TradingService {
     return result
   }
 
-  generateRandomOrder(data) {
+  generateRandomOrder(data): {buy: Array<Object>, sell: Array<Object>} {
     let numberFake = Math.pow(10, 8)
     let high = Number(data.high)
     let low = Number(data.low)

@@ -10,7 +10,6 @@ import { TradingService } from 'src/app/services/trading.service'
 export class TradingListComponent implements OnInit {
   dataSell: any;
   dataBuy: any;
-  interval: any;
 
   public _TradingSub: Subscription = new Subscription();
   constructor(private tradingService: TradingService) { }
@@ -21,9 +20,6 @@ export class TradingListComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this._TradingSub.unsubscribe();
-    if (this.interval) {
-      clearInterval(this.interval);
-    }
   }
   get totalBuy() {
     let total = 0
@@ -56,9 +52,6 @@ export class TradingListComponent implements OnInit {
         error => {
           console.log(error);
         });
-    this.interval = setInterval(() => {
-      this.tradingService.sendMessage(true);
-    }, 3000);
   }
   initSocket() {
     this._TradingSub = this.tradingService.tradingLists.subscribe(response => {
