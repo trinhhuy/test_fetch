@@ -27,9 +27,6 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   afterInit(server: Server) {
     this.logger.log('Init');
-    setInterval(function(){
-      this.server.emit('trading', true);
-    }, 3000);
   }
 
   handleDisconnect(client: Socket) {
@@ -38,5 +35,11 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
+    let vm = this
+    setInterval(function(){
+      vm.service.getDataOrder().then(data => {
+        vm.server.emit('trading-lists', data)
+      })
+    }, 3000);
   }
 }

@@ -1,12 +1,10 @@
-import { Injectable, HttpService } from '@nestjs/common';
-
+import { Injectable } from '@nestjs/common';
+const axios = require('axios')
 @Injectable()
 export class TradingService {
-  constructor(private readonly http: HttpService) {}
-
   async getData(): Promise<{ high: Number, low: Number }> {
     try {
-      let response = await this.http.get('https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1m&&limit=1')
+      let response = await axios.get('https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=1m&&limit=1')
       if (response.data) {
         let item = response.data[0]
         return { high: Number(item[2]), low: Number(item[3]) }
@@ -42,21 +40,29 @@ export class TradingService {
 
   generateRandomOrder(data): {buy: Array<Object>, sell: Array<Object>} {
     let numberFake = Math.pow(10, 8)
+
+    let listBuy = this.getDataBuy(numberFake, data)
+    let listSell = this.getDataSell(numberFake, data)
+
+    return {
+      buy: listBuy,
+      sell: listSell
+    }
+  }
+
+  getDataBuy(numberFake, data){
     let high = Number(data.high)
     let low = Number(data.low)
-    let maxBuy = 5
-    let sizeSell = 150
-    let isBuy = true
-    let isSell = true
+
+    let listBuy = []
     let totalBuyGenerated = 0
-    let totalSizeSold = 0
+    let isBuy = true
     let price = 0
     let size = 0
-    let listBuy = []
-    let listSell = []
-
+    let maxBuy = 5
     while (isBuy) {
-      price = (listBuy.length === 0) ? low : this.getRandomNumberBetween(low, (low + high) / 2)
+      let totalLowHeight = low + high
+      price = (listBuy.length === 0) ? low : this.getRandomNumberBetween(low, (totalLowHeight) / 2)
       size = this.getRandomNumberBetween(0, (maxBuy / 10) / high)
       if (!size) {
         continue
@@ -71,6 +77,19 @@ export class TradingService {
         })
       }
     }
+    return listBuy
+  }
+
+  getDataSell(numberFake, data) {
+    let high = Number(data.high)
+    let low = Number(data.low)
+
+    let sizeSell = 150
+    let isSell = true
+    let totalSizeSold = 0
+    let price = 0
+    let size = 0
+    let listSell = []
     while (isSell) {
       price = (listSell.length === 0) ? high : this.getRandomNumberBetween((low + high) / 2, high)
       size = this.getRandomNumberBetween(0, sizeSell / 10)
@@ -87,11 +106,7 @@ export class TradingService {
         })
       }
     }
-
-    return {
-      buy: listBuy,
-      sell: listSell
-    }
+    return listSell
   }
 
   getRandomNumberBetween(min, max) {
